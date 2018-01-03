@@ -8,7 +8,8 @@ pipeline {
       steps {
         container('maven') {
 //          sh 'mvn clean deploy'
-          input id: 'ok', message: 'ok?'
+//          input id: 'ok', message: 'ok?'
+          sh 'mvn -version'
         }
       }
     }
