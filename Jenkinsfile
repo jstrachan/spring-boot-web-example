@@ -7,7 +7,8 @@ pipeline {
     stage('Run maven') {
       steps {
         container('maven') {
-          sh 'mvn clean install deploy'
+//          sh 'mvn clean deploy'
+          input id: 'ok', message: 'ok?'
         }
       }
     }
