@@ -8,17 +8,14 @@ pipeline {
       steps {
         container('maven') {
           //sh "mvn clean deploy fabric8:build fabric8:push -Ddocker.push.registry=$JENKINS_X_DOCKER_REGISTRY_SERVICE_HOST:$JENKINS_X_DOCKER_REGISTRY_SERVICE_PORT"
-
-          dir('./helm/spring-boot-web-example'){
-            sh 'make release'
-          }
         }
       }
     }
-    stage('Deploy Staging') {
-      steps {
-        container('maven') {
-          dir('./helm/spring-boot-web-example'){
+    dir('./helm/spring-boot-web-example'){
+      stage('Deploy Staging') {
+        steps {
+          container('maven') {
+            sh 'make release'
             sh 'helm install . --namespace staging --name example-release'
           }
         }
