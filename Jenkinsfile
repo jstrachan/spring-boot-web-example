@@ -11,7 +11,7 @@ pipeline {
         }
       }
     }
-    dir('./helm/spring-boot-web-example'){
+
       stage('Deploy Staging') {
         steps {
           container('maven') {
@@ -20,6 +20,6 @@ pipeline {
           }
         }
       }
-    }
+
   }
 }
