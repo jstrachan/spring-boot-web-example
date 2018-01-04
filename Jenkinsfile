@@ -15,6 +15,7 @@ pipeline {
       stage('Deploy Staging') {
         steps {
           container('maven') {
+            sh 'cd ./helm/spring-boot-web-example'
             sh 'make release'
             sh 'helm install . --namespace staging --name example-release'
           }
