@@ -14,17 +14,15 @@ pipeline {
 
       stage('Deploy Staging') {
         steps {
-          container('maven') {
-            sh 'pwd'
-            sh 'ls -al'
-            sh 'cd ./helm/spring-boot-web-example'
-            sh 'pwd'
-            sh 'ls -al'
-            sh 'make release'
-            sh 'helm install . --namespace staging --name example-release'
+          dir ('./helm/spring-boot-web-example') {
+            container('maven') {
+              sh 'pwd'
+              sh 'ls -al'
+              sh 'make release'
+              sh 'helm install . --namespace staging --name example-release'
+            }
           }
         }
       }
-
   }
 }
