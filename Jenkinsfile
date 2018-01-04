@@ -7,7 +7,7 @@ pipeline {
     stage('Run maven') {
       steps {
         container('maven') {
-          sh 'mvn clean deploy'
+          sh 'mvn clean deploy fabric8:build'
 //          input id: 'ok', message: 'ok?'
 
         }
