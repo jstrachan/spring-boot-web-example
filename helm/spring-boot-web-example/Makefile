@@ -1,4 +1,4 @@
-CHART_REPO := http://jenkins-x-chartmuseum
+CHART_REPO := http://jenkins-x-chartmuseum:8080
 NAME := spring-boot-web-example
 OS := $(shell uname)
 RELEASE_VERSION := $(shell jx-release-version)
