@@ -11,18 +11,26 @@ pipeline {
         }
       }
     }
+    stage('Deploy Staging') {
+      environment {
+          JENKINS_X_BOT = credentials('jenkins-x-bot')
+          JENKINS_X_BOT_USER = "${env.JENKINS_X_BOT_USR}"
+          JENKINS_X_BOT_PASSWORD = "${env.JENKINS_X_BOT_PSW}"
+      }
 
-      stage('Deploy Staging') {
-        steps {
-          dir ('./helm/spring-boot-web-example') {
-            container('maven') {
-              sh 'pwd'
-              sh 'ls -al'
-              sh 'make release'
-              sh 'helm install . --namespace staging --name example-release'
-            }
+      steps {
+        dir ('./helm/spring-boot-web-example') {
+          container('maven') {
+            sh """cat > ~/.netrc << EOL
+machine github.com
+       login $JENKINS_X_BOT_USER
+       password $JENKINS_X_BOT_PASSWORD
+EOL"""
+            sh 'make release'
+            sh 'helm install . --namespace staging --name example-release'
           }
         }
       }
+    }
   }
 }
