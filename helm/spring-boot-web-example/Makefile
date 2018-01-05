@@ -1,7 +1,7 @@
 CHART_REPO := http://jenkins-x-chartmuseum
 NAME := spring-boot-web-example
 OS := $(shell uname)
-RELEASE_VERSION := $(shell jx-release-version --debug)
+RELEASE_VERSION := $(shell jx-release-version)
 
 build: clean
 	rm -rf requirements.lock
