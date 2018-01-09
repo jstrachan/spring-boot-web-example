@@ -24,6 +24,12 @@ clean:
 release: clean
 	helm dependency build
 	helm lint
+	helm init --client-only
+	helm package .
+	curl --data-binary "@$(NAME)-$(RELEASE_VERSION).tgz" $(CHART_REPO)/api/charts
+	rm -rf ${NAME}*.tgz%
+
+tag:
 ifeq ($(OS),Darwin)
 	sed -i "" -e "s/version:.*/version: $(RELEASE_VERSION)/" Chart.yaml
 else ifeq ($(OS),Linux)
@@ -36,7 +42,3 @@ endif
 	git commit -m "release $(RELEASE_VERSION)" --allow-empty # if first release then no verion update is performed
 	git tag -fa v$(RELEASE_VERSION) -m "Release version $(RELEASE_VERSION)"
 	git push origin v$(RELEASE_VERSION)
-	helm init --client-only
-	helm package .
-	curl --data-binary "@$(NAME)-$(RELEASE_VERSION).tgz" $(CHART_REPO)/api/charts
-	rm -rf ${NAME}*.tgz%
