@@ -2,6 +2,7 @@ CHART_REPO := http://jenkins-x-chartmuseum:8080
 NAME := spring-boot-web-example
 OS := $(shell uname)
 RELEASE_VERSION := $(shell jx-release-version)
+TARBALL := $(shell ls $(NAME)-*.tgz)
 
 build: clean
 	rm -rf requirements.lock
@@ -26,7 +27,7 @@ release: clean
 	helm lint
 	helm init --client-only
 	helm package .
-	curl --data-binary "@$(shell ls $(NAME)-*.tgz)" $(CHART_REPO)/api/charts
+	curl --data-binary "@$(TARBALL)" $(CHART_REPO)/api/charts
 	rm -rf ${NAME}*.tgz%
 
 tag:
