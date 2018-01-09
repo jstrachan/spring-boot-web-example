@@ -26,7 +26,7 @@ release: clean
 	helm lint
 	helm init --client-only
 	helm package .
-	curl --data-binary "@$(NAME)-$(RELEASE_VERSION).tgz" $(CHART_REPO)/api/charts
+	curl --data-binary "@$(NAME)-*.tgz" $(CHART_REPO)/api/charts
 	rm -rf ${NAME}*.tgz%
 
 tag:
