@@ -7,7 +7,7 @@ pipeline {
     stage('Build Release') {
       steps {
         container('maven') {
-          //sh "mvn clean deploy fabric8:build fabric8:push -Ddocker.push.registry=$JENKINS_X_DOCKER_REGISTRY_SERVICE_HOST:$JENKINS_X_DOCKER_REGISTRY_SERVICE_PORT"
+          sh "mvn clean deploy fabric8:build fabric8:push -Ddocker.push.registry=$JENKINS_X_DOCKER_REGISTRY_SERVICE_HOST:$JENKINS_X_DOCKER_REGISTRY_SERVICE_PORT"
         }
       }
     }
@@ -16,9 +16,11 @@ pipeline {
       steps {
         dir ('./helm/spring-boot-web-example') {
           container('maven') {
-            input id: 'ok', message: 'ok?'
-            //sh 'make release'
-            //sh 'helm install . --namespace staging --name example-release'
+            // until kubernetes plugin supports init containers https://github.com/jenkinsci/kubernetes-plugin/pull/229/
+            sh 'cp /root/netrc/.netrc /root/.netrc'
+            
+            sh 'make release'
+            sh 'helm install . --namespace staging --name example-release'
           }
         }
       }
