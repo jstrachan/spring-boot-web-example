@@ -12,6 +12,9 @@ pipeline {
         }
         dir ('./helm/spring-boot-web-example') {
           container('maven') {
+            // until kubernetes plugin supports init containers https://github.com/jenkinsci/kubernetes-plugin/pull/229/
+            sh 'cp /root/netrc/.netrc ~/.netrc'
+
             sh "make tag"
           }
         }
@@ -25,9 +28,6 @@ pipeline {
       steps {
         dir ('./helm/spring-boot-web-example') {
           container('maven') {
-            // until kubernetes plugin supports init containers https://github.com/jenkinsci/kubernetes-plugin/pull/229/
-            sh 'cp /root/netrc/.netrc ~/.netrc'
-
             sh 'make release'
             sh 'helm install . --namespace staging --name example-release'
           }
